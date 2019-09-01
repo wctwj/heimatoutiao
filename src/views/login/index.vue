@@ -6,10 +6,10 @@
           </div>
           <el-form style="margin-top:20px">
               <el-form-item>
-                  <el-input></el-input>
+                  <el-input placeholder="请输入手机号"></el-input>
               </el-form-item>
               <el-form-item>
-                  <el-input style="width:280px"></el-input>
+                  <el-input style="width:280px" placeholder="请输入验证码"></el-input>
                   <el-button style="float:right">发送验证码</el-button>
               </el-form-item>
               <el-form-item>
