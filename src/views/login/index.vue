@@ -64,10 +64,20 @@ export default {
         login(){
             this.$refs.loginForm.validate((isOk,obj)=>{
                 if(isOk){
-                    this.$message({type:'success',message:'成功'})
-                }else{
-                    this.$message({type:'warning',message:'失败'})
-                } 
+                    this.$axios({
+                        url:'/authorizations',
+                        method:'post',
+                        data:this.loginForm
+                    }).then(result=>{
+                        window.localStorage.setItem('user-token',result.data.data.token)
+                        this.$router.push('/')
+                    }).catch(()=>{
+                        this.$message({
+                            message:'手机号或验证码错误',
+                            type:'warning'
+                        })
+                    })
+                }
             })
         }
     }
