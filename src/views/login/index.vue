@@ -67,7 +67,7 @@ export default {
                     this.$message({type:'success',message:'成功'})
                 }else{
                     this.$message({type:'warning',message:'失败'})
-                }
+                } 
             })
         }
     }
