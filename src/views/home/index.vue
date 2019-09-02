@@ -10,7 +10,9 @@
           <el-header>
             <layout-header></layout-header>
           </el-header>
-          <el-main>youcexia</el-main>
+          <el-main>
+            <router-view></router-view>
+          </el-main>
         </el-container>
       </el-container>
   </div>
