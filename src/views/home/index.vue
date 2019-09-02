@@ -2,10 +2,14 @@
   <div>
       <el-container>
         <!-- 左侧 -->
-        <el-aside>zuoce</el-aside>
+        <el-aside style="width:200px">
+          <layout-aside></layout-aside>
+        </el-aside>
         <el-container>
           <!-- 右侧 -->
-          <el-header>youceshang</el-header>
+          <el-header>
+            <layout-header></layout-header>
+          </el-header>
           <el-main>youcexia</el-main>
         </el-container>
       </el-container>
@@ -14,7 +18,6 @@
 
 <script>
 export default {
-
 }
 </script>
 
