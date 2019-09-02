@@ -6,14 +6,14 @@
       </el-col>
       <el-col :span=3 class="right">
           <img class="head-img" :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
-           <el-dropdown trigger="click">
+      <el-dropdown trigger="click" @command='handleMenuItem'>
       <span class="el-dropdown-link">
         {{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>个人信息</el-dropdown-item>
-        <el-dropdown-item>git地址</el-dropdown-item>
-        <el-dropdown-item>退出</el-dropdown-item>
+        <el-dropdown-item command='accout'>个人信息</el-dropdown-item>
+        <el-dropdown-item command='git'>git地址</el-dropdown-item>
+        <el-dropdown-item command='lgout'>退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
       </el-col>
@@ -37,6 +37,16 @@ export default {
       }).then(result=>{
         this.userInfo = result.data.data
       })
+    },
+    handleMenuItem(command){
+      if( command === 'accound'){
+
+      }else if( command === 'git'){
+        window.location.href = 'https://github.com/wctwj/heimatoutiao'
+      }else{
+        window.localStorage.clear()
+        this.$router.push('/login')
+      }
     }
   },
   created(){
