@@ -27,10 +27,10 @@
             <i class="el-icon-s-custom"></i>
             <span>粉丝管理</span>
         </template>
-        <el-menu-item>图文数据</el-menu-item>
-        <el-menu-item>粉丝概括</el-menu-item>
-        <el-menu-item>粉丝列表</el-menu-item>
-        <el-menu-item>粉丝列表</el-menu-item>
+        <el-menu-item index='/home/fansdata'>图文数据</el-menu-item>
+        <el-menu-item index='/home/fansinfo'>粉丝概括</el-menu-item>
+        <el-menu-item index='/home/fanslist'>粉丝列表</el-menu-item>
+        <el-menu-item index='/home/fansimg'>粉丝列表</el-menu-item>
       </el-submenu>
       <el-menu-item index="/home/account">
         <i class="el-icon-s-tools"></i>
