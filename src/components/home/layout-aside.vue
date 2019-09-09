@@ -7,7 +7,8 @@
       background-color="#323745"
       text-color="#adafb5"
       active-text-color="#ffd04b"
-      router>
+      router
+      style="width:201px">
       <el-menu-item index="/">
         <i class="el-icon-s-home"></i>
         <span slot="title">首页</span>
