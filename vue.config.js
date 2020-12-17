@@ -2,5 +2,5 @@
 module.exports = {
   publicPath: './',
   outputDir: 'docs',
-  assetsDir: 'static',
+  assetsDir: 'static'
 }
