@@ -11,8 +11,12 @@
       @swiperight="changeMoveDirection(1)"
       @swipedown="changeMoveDirection(2)"
       @swipeleft="changeMoveDirection(3)">
-      <p class="game-tips" v-if="showGame">是否要开始贪吃蛇游戏？</p>
+      <p class="game-tips" v-if="showGame">是否要开始贪吃蛇游戏？(请使用键盘方向键或点击控制)</p>
       <div class="start" @click="start" v-if="showGame">start！</div>
+      <button class="shang" v-if="!showGame" @click="changeMoveDirection(0)">上</button>
+      <button class="zuo" v-if="!showGame" @click="changeMoveDirection(3)">左</button>
+      <button class="you" v-if="!showGame" @click="changeMoveDirection(1)">右</button>
+      <button class="xia" v-if="!showGame" @click="changeMoveDirection(2)">下</button>
         <div class="game-wrapper" ref="container">
           <div class="block-group" v-for="(item, index) in structureArray" :key="index">
             <div class="block"
@@ -333,5 +337,35 @@ export default {
       font-size: 30px;
       cursor: pointer;
       color: red;
+    }
+    .shang,.zuo,.you,.xia {
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      background-color: red;
+      color: #fff;
+      z-index: 9;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .shang {
+      top: 50px;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+    .zuo {
+      top: 50px;
+      left: 50px;
+      // transform: translate(-50%, 0);
+    }
+    .you {
+      top: 50px;
+      right: 50px;
+      // transform: translate(-50%, 0);
+    }
+    .xia {
+      bottom: 50px;
+      left: 50%;
+      transform: translate(-50%, 0);
     }
 </style>
