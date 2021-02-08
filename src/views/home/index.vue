@@ -229,6 +229,7 @@ export default {
       }
     },
     async start () {
+      this.nextMoveDirection = 1
       this.showGame = false
       await this.initializationGrid() // 初始化网格
       this.initializationSnake() // 初始化蛇
