@@ -1,32 +1,36 @@
 <template>
   <div>
-    <div class="home-banner">
-      <p>welcome to my space！！！ 新年快乐！！！</p>
-    </div>
-    <div id="game"
-      class="tetris-wrapper"
-      @click="test"
-      ref="test"
-      @swipeup="changeMoveDirection(0)"
-      @swiperight="changeMoveDirection(1)"
-      @swipedown="changeMoveDirection(2)"
-      @swipeleft="changeMoveDirection(3)">
-      <p class="game-tips" v-if="showGame">是否要开始贪吃蛇游戏？(请使用键盘方向键或点击控制)</p>
-      <div class="start" @click="start" v-if="showGame">start！</div>
-      <button class="shang" v-if="!showGame" @click="changeMoveDirection(0)">上</button>
-      <button class="zuo" v-if="!showGame" @click="changeMoveDirection(3)">左</button>
-      <button class="you" v-if="!showGame" @click="changeMoveDirection(1)">右</button>
-      <button class="xia" v-if="!showGame" @click="changeMoveDirection(2)">下</button>
-        <div class="game-wrapper" ref="container">
-          <div class="block-group" v-for="(item, index) in structureArray" :key="index">
-            <div class="block"
-            v-for="(block, blockIndex) in item"
-            :key="blockIndex"
-            :class="{green: block.state === 1, red: block.state === 2, blue: block.state === 3, black: block.state === 4}">
-            </div>
-          </div>
-        </div>
+    <div class="header">
+      <div class="p-box">
+        <p>李子桉的个人网站</p>
+        <p>Welcome To Li Zian's Personal Website</p>
       </div>
+      <div class="wx">
+        <p class="xuanfu">
+          悬浮此处扫描二维码添加我为好友~！
+          <img src="../../assets/img/pwx.png" alt="" class="pwx">
+          <img src="../../assets/img/jiantou.png" alt="" class="jiantou">
+          <span>扫他！扫他！！</span>
+        </p>
+        <img src="../../assets/img/wx.jpg" alt="">
+        <p>llizian</p>
+      </div>
+    </div>
+    <div class="wenzhang-box">
+      <div class="title">优秀文章展示！</div>
+      <a target="_blank" href="https://juejin.cn/post/6931204993395621895"><div class="item">今天聊：前端工程师的晋升逻辑到底是什么</div></a>
+      <a target="_blank" href="https://juejin.cn/post/6930419481835470861"><div class="item">2021前端学习路径书单—自我成长之路</div></a>
+      <a target="_blank" href="https://juejin.cn/post/6927481938831736839"><div class="item">我从 Vuejs 中学到了什么</div></a>
+      <a target="_blank" href="https://juejin.cn/post/6930412294149472269"><div class="item">十分钟教你用svg做出精美的动画！</div></a>
+      <a target="_blank" href="https://juejin.cn/post/6930897845369356295"><div class="item">化身面试官出30+Vue面试题，超级干货（附答案）｜牛气冲天新年征文</div></a>
+      <a target="_blank" href="https://juejin.cn/post/6930428551091109896"><div class="item">你真的了解ES6中的函数特性么？</div></a>
+    </div>
+    <div class="shengyu-box">
+      <p>剩余模块待开发中！。。。</p>
+    </div>
+    <div class="dongtu">
+      <img src="https://nie.res.netease.com/r/pic/20180913/e8985f58-81c3-4366-8fef-791423c01b3e.gif" alt="">
+    </div>
   </div>
 </template>
 
@@ -35,338 +39,125 @@ import '../../style/index.less'
 export default {
   data () {
     return {
-      timer: null, // 存储定时器
-      interval: 200, // 定时间隔时间
-      transverse: 20, // 横坐标方格数量
-      structureArray: [], // 游戏画布结构数组
-      moveDirection: 1, // 蛇的移动方向，0、1、2、3，上右下左
-      nextMoveDirection: 1, // 将要移动的方向，0、1、2、3，上右下左
-      snakeHead: {}, // 蛇头的坐标
-      snakeTail: {}, // 蛇尾坐标
-      foodCoordinate: {}, // 食物坐标
-      showGame: true
-    }
-  },
-  methods: {
-    test () {
-      console.log(this.$refs.container.clientHeight)
-      console.log(this.$refs.container.clientWidth)
-      console.log(this.longitudinal)
-    },
-    changeMoveDirection (direction) { // 改变蛇的运动方向
-      let judge = direction - this.moveDirection // 判断非法的蛇头转向
-      if (judge === 2 || judge === -2) return
-      this.nextMoveDirection = direction
-    },
-    mobileRule () { // 蛇的移动规则定义
-      let { x, y } = this.snakeHead // 当前蛇头的坐标
-      let headCode = this.structureArray[y][x].code // 获取当前蛇头的code,用来生成新蛇头时++使用
-      this.structureArray[y][x].state = 1 // 取消原来的蛇头状态
-      switch (this.nextMoveDirection) { // 移动方向，计算移动后的横纵坐标
-        case 0:
-          y--
-          break
-        case 1:
-          x++
-          break
-        case 2:
-          y++
-          break
-        case 3:
-          x--
-          break
-        default:
-          throw new Error('蛇的移动规则判断出错')
-      }
-      this.structureArray[y].splice(x, 1, { state: 2, code: ++headCode }) // 生成新的蛇头
-      this.snakeHead = { x, y }
-      this.moveDirection = this.nextMoveDirection
-      this.whetherEatFood() // 判断是否吃到食物（蛇头和食物坐标是否重合）
-    },
-    whetherEatFood () { // 是否吃到食物判断
-      let state = JSON.stringify(this.snakeHead) === JSON.stringify(this.foodCoordinate) // 判断食物和蛇头是否在一个坐标上
-      if (state) { // 吃到了
-        this.generateFood() // 生成食物
-        this.integralRule() // 走积分
-        this.increaseDifficulty() // 增加难度
-      } else { // 没吃到食物
-        this.generateSnakeTail() // 重新生成蛇尾
-      }
-    },
-    generateFood () { // 生成食物,生成随机食物坐标
-      let x = Math.floor(Math.random() * this.transverse) // 生成随机数
-      let y = Math.floor(Math.random() * this.longitudinal) // 生成随机数
-      if (this.structureArray[y][x].state === 0) { // 是空位置
-        this.foodCoordinate = { x, y } // 新的食物坐标
-        this.structureArray[y].splice(x, 1, { state: 4, code: Infinity }) // 修改坐标状态值,code无限大用来计算蛇尾时不会出错
-      } else { // 位置不为空，重新生成
-        this.generateFood()
-      }
-    },
-    integralRule () { // 积分规则
-
-    },
-    increaseDifficulty () { // 增加难度规则
-      if (this.interval <= 100) return
-      this.interval -= 4
-      this.clearTimer()
-      this.initializationTimer()
-    },
-    generateSnakeTail () { // 重新生成蛇尾(在没有吃到食物的情况下调用)
-      let { x, y } = this.snakeTail // 获取蛇尾坐标
-      // let tailCode = this.structureArray[y][x].code + 1; // 计算将要作为蛇尾的code -------- 这里code取错了，这样的话取得是蛇头的，改成取上下左右最小的code
-      // 销毁之前的蛇尾(若当前蛇尾蛇尾位置是蛇头，则不做处理，因为头先生成)
-      if (this.structureArray[y][x].state !== 2) this.structureArray[y].splice(x, 1, { state: 0 })
-      // 接下来重新定位蛇尾坐标
-      /* if (this.structureArray[y + 1][x].state && tailCode === this.structureArray[y + 1][x].code) y++;
-        else if (this.structureArray[y - 1][x].state && tailCode === this.structureArray[y - 1][x].code) y--;
-        else if (this.structureArray[y][x + 1].state && tailCode === this.structureArray[y][x + 1].code) x++;
-        else if (this.structureArray[y][x - 1].state && tailCode === this.structureArray[y][x - 1].code) x--; */
-      // else throw new Error('重新生成蛇尾错误')
-      // 取上下左右code最小的是新蛇尾
-      let top = (y - 1 >= 0) && this.structureArray[y - 1][x].state ? this.structureArray[y - 1][x].code : Infinity
-      let bottom = (y + 1 < this.longitudinal) && this.structureArray[y + 1][x].state ? this.structureArray[y + 1][x].code : Infinity
-      let left = (x - 1 >= 0) && this.structureArray[y][x - 1].state ? this.structureArray[y][x - 1].code : Infinity
-      let right = (x + 1 < this.transverse) && this.structureArray[y][x + 1].state ? this.structureArray[y][x + 1].code : Infinity
-      let min = Math.min(top, bottom, left, right)
-      switch (min) {
-        case top:
-          y--
-          break
-        case bottom:
-          y++
-          break
-        case left:
-          x--
-          break
-        case right:
-          x++
-          break
-        default:
-          console.log('重新生成蛇尾出错了')
-          break
-      }
-      this.snakeTail = { x, y } // 保存蛇尾坐标
-      this.structureArray[y][x].state = 3 // 将此坐标定义为蛇尾
-    },
-    deathRule () { // 蛇的死亡规则判断
-      let { x, y } = this.snakeHead
-      switch (this.nextMoveDirection) { // 移动方向(碰壁判断和碰蛇身判断)
-        case 0:
-          if (y - 1 < 0) return false
-          else if (this.structureArray[y - 1][x].state === 1) return false
-          break
-        case 1:
-          if (x + 1 > this.transverse - 1) return false
-          else if (this.structureArray[y][x + 1].state === 1) return false
-          break
-        case 2:
-          if (y + 1 > this.longitudinal - 1) return false
-          else if (this.structureArray[y + 1][x].state === 1) return false
-          break
-        case 3:
-          if (x - 1 < 0) return false
-          else if (this.structureArray[y][x - 1].state === 1) return false
-          break
-        default:
-          throw new Error('蛇的死亡规则判断错误')
-      }
-      return true
-    },
-    deathTreatment () { // 蛇的死亡处理
-      this.clearTimer()
-      alert('你的小宝贝没了！！！！')
-      this.showGame = true
-    },
-    initializationGrid () { // 初始化网格
-      this.structureArray = []
-      for (let i = 0; i < this.longitudinal; i++) {
-        this.structureArray.push([])
-        for (let j = 0; j < this.transverse; j++) {
-          this.structureArray[i].push({
-            state: 0 // 0为空，1为蛇身，2为蛇头，3为蛇尾，4为食物
-          })
-        }
-      }
-    },
-    initializationSnake () { // 初始化蛇
-      this.structureArray[2].splice(4, 1, { state: 2, code: 2 })
-      this.structureArray[2].splice(3, 1, { state: 1, code: 1 })
-      this.structureArray[2].splice(2, 1, { state: 3, code: 0 })
-      this.snakeHead = { x: 4, y: 2 } // 蛇头坐标
-      this.snakeTail = { x: 2, y: 2 } // 蛇尾坐标
-    },
-    initializationTimer () { // 初始化定时器
-      this.timer = setInterval(() => {
-        // 处理
-        if (this.deathRule()) { // 死不了
-          this.mobileRule() // 走移动
-        } else { // 死掉了
-          this.deathTreatment()
-        }
-      }, this.interval)
-    },
-    clearTimer () { // 清理定时器
-      clearInterval(this.timer)
-    },
-    addKeyboardEvents () { // 添加全局键盘按下事件
-      document.onkeydown = (event) => {
-        console.log(event)
-        switch (event.keyCode) {
-          case 38:
-            this.changeMoveDirection(0)
-            break
-          case 39:
-            this.changeMoveDirection(1)
-            break
-          case 40:
-            this.changeMoveDirection(2)
-            break
-          case 37:
-            this.changeMoveDirection(3)
-            break
-        }
-      }
-    },
-    async start () {
-      this.nextMoveDirection = 1
-      this.showGame = false
-      await this.initializationGrid() // 初始化网格
-      this.initializationSnake() // 初始化蛇
-      this.initializationTimer() // 初始化定时器
-      this.generateFood() // 生成食物
-      this.addKeyboardEvents() // 添加键盘按下事件
-    }
-  },
-  async mounted () {
-    // await this.initializationGrid() // 初始化网格
-    // this.initializationSnake() // 初始化蛇
-    // this.initializationTimer() // 初始化定时器
-    // this.generateFood() // 生成食物
-    // this.addKeyboardEvents() // 添加键盘按下事件
-  },
-  destroyed () {
-    this.clearTimer()
-  },
-  computed: {
-    longitudinal () { // 获取容器宽高比,计算纵坐标方格数
-      let boxWidth = this.$refs.container.clientWidth
-      let boxHeight = this.$refs.container.clientHeight
-      let longitudinal = parseInt((boxHeight / boxWidth) * this.transverse)
-      return longitudinal
     }
   }
-
 }
 </script>
-
+<style>
+body {
+  background: url('../../assets/img/bg.jpg') repeat;
+}
+</style>
 <style lang="less" scoped>
-  .home-banner {
+  .header {
     width: 100%;
-    height: 400px;
-    background: url('../../assets/img/banner.jpg') no-repeat center;
-    background-size: 100% 100%;
-    padding-top: 150px;
+    height: 100px;
+    background-color: #eee;
+    box-shadow: 0px 5px 10px #ccc;
+    padding-top: 10px;
     box-sizing: border-box;
+    position: fixed;
+    .p-box {
+      float: left;
+      width: 50%;
+    }
     p {
-      text-align: center;
-      font-size: 40px;
-      color: yellow;
+      padding-left: 100px;
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    .wx {
+      float: right;
+      padding-top: 10px;
+      margin-right: 100px;
+      position: relative;
+      img {
+        width: 50px;
+        height: 50px;
+        float: left;
+      }
+      p {
+        float: left;
+        padding-left: 30px;
+        margin-top: 20px;
+      }
+      .xuanfu {
+        background-color: #bbb;
+        color: #fff;
+        margin-right: 30px;
+        font-size: 16px;
+        // margin-top: 25px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      .xuanfu:hover .pwx,
+      .xuanfu:hover .jiantou,
+      .xuanfu:hover span {
+        display: block;
+      }
+      .pwx {
+        position: absolute;
+        bottom: -110px;
+        left: 100px;
+        width: 100px;
+        height: 100px;
+        display: none;
+      }
+      .jiantou {
+        position: absolute;
+        bottom: -150px;
+        left: 200px;
+        transform: rotate(40deg);
+        display: none;
+      }
+      span {
+        position: absolute;
+        bottom: -150px;
+        left: 270px;
+        color: red;
+        display: none;
+      }
     }
   }
 
-    .tetris-wrapper {
-      position: absolute;
-      top: 400px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #fff;
-      overflow: auto;
-    }
-    .game-wrapper {
-      position: absolute;
-      top: 0.1rem;
-      bottom: 0.1rem;
-      left: 0.1rem;
-      right: 0.1rem;
-      display: flex;
-      flex-direction: column;
-      background-color: grey;
-    }
-    .block-group {
-      flex: 1;
-      position: relative;
-      display: flex;
-    }
-    .block {
-      flex: 1;
-      border: 0.01rem solid #000;
-    }
-    .green {
-      background-color: green;
-    }
-    .red {
-      background-color: red;
-    }
-    .blue {
-      background-color: blue;
-    }
-    .black {
-      background-color: black;
-    }
-    .game-tips {
-      position: absolute;
-      color: red;
-      z-index: 9;
-      left: 50%;
-      top: 100px;
-      transform: translate(-50%, 0);
-      font-size: 40px;
-    }
-    .start {
-      width: 200px;
-      height: 50px;
-      background-color: skyblue;
-      position: absolute;
-      z-index: 9;
-      left: 50%;
-      top: 200px;
-      transform: translate(-50%, 0);
-      text-align: center;
-      line-height: 50px;
-      font-size: 30px;
-      cursor: pointer;
-      color: red;
-    }
-    .shang,.zuo,.you,.xia {
-      width: 50px;
-      height: 50px;
-      position: absolute;
-      background-color: red;
-      color: #fff;
-      z-index: 9;
-      font-size: 20px;
+  .wenzhang-box {
+    width:60%;
+    height: 1000px;
+    margin: 0 auto;
+    background-color: #fff4db;
+    padding-top: 200px;
+    box-sizing: border-box;
+    padding-right: 100px;
+    .title {
+      font-size: 24px;
+      margin-left: 50px;
       font-weight: bold;
+      margin-bottom: 80px;
     }
-    .shang {
-      top: 50px;
-      left: 50%;
-      transform: translate(-50%, 0);
+    .item {
+      font-size: 20px;
+      margin-left: 100px;
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #ccc;
     }
-    .zuo {
-      top: 50px;
-      left: 50px;
-      // transform: translate(-50%, 0);
+  }
+  .shengyu-box {
+    background-color: #fff4db;
+    padding-top: 100px;
+    box-sizing: border-box;
+    height: 200px;
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 50px;
+    p {
+      text-align: center;
+      color: #aaa;
     }
-    .you {
-      top: 50px;
-      right: 50px;
-      // transform: translate(-50%, 0);
-    }
-    .xia {
-      bottom: 50px;
-      left: 50%;
-      transform: translate(-50%, 0);
-    }
+  }
+  .dongtu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
 </style>
